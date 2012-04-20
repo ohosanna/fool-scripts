@@ -1,0 +1,13 @@
+#!/bin/bash
+CTRL=vmix0-outvol
+touch $HOME/.volume
+VOLUME=$(cat $HOME/.volume)
+CURRENT=$(ossmix | grep $CTRL | awk '{print $4}' | awk -F : '{print $1}')
+if [ $CURRENT = "0.0" ]; then
+      ossmix $CTRL $VOLUME
+      > $HOME/.volume
+else
+      VOLUME=$(ossmix | grep $CTRL | awk '{print $4}' | awk -F : '{print $1}')
+      ossmix $CTRL 0
+      echo $VOLUME > $HOME/.volume
+fi
